@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-app
+  namespace: dev
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/tags: app=dev,Team=DevOps
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:338240650890:certificate/5b099762-6fda-45fd-a5f2-034156c43f0f
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+spec:
+  ingressClassName: alb
+  rules:
+    - host: dev.telugudevopsguru.in
+      http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: nginx-app
+                port:
+                  number: 80
+    - host: qa.telugudevopsguru.in
+      http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: nginx-app
+                port:
+                  number: 80
